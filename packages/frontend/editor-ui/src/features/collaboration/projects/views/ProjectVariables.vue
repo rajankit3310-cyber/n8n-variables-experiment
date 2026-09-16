@@ -74,9 +74,7 @@ const { isLoading, execute } = useAsyncState(environmentsStore.fetchAllVariables
 	immediate: true,
 });
 
-const isFeatureEnabled = computed(
-	() => settingsStore.isEnterpriseFeatureEnabled[EnterpriseEditionFeature.Variables],
-);
+const isFeatureEnabled = computed(() => true);
 
 const openCreateVariableModal = () => {
 	uiStore.openModalWithData({ name: VARIABLE_MODAL_KEY, data: { mode: 'new' } });
