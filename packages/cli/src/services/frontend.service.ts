@@ -529,7 +529,8 @@ export class FrontendService {
 			mfaEnforcement: this.licenseState.isMFAEnforcementLicensed(),
 			provisioning: false, // temporarily disabled until this feature is ready for release
 			advancedExecutionFilters: this.license.isAdvancedExecutionFiltersEnabled(),
-			variables: this.license.isVariablesEnabled(),
+			// EXPERIMENTAL: expose Variables as enabled in frontend settings.
+			variables: true,
 			sourceControl: this.license.isSourceControlLicensed(),
 			externalSecrets: this.license.isExternalSecretsEnabled(),
 			showNonProdBanner: this.license.isLicensed(LICENSE_FEATURES.SHOW_NON_PROD_BANNER),
@@ -570,9 +571,8 @@ export class FrontendService {
 			});
 		}
 
-		if (this.license.isVariablesEnabled()) {
-			this.settings.variables.limit = this.license.getVariablesLimit();
-		}
+		// EXPERIMENTAL: Variables have no plan-based instance limit.
+		this.settings.variables.limit = -1;
 
 		if (isAiAssistantEnabled) {
 			this.settings.aiAssistant.enabled = isAiAssistantEnabled;
