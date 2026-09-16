@@ -4,13 +4,11 @@ import {
 	NEW_VARIABLE_KEY_REGEX,
 } from '@n8n/api-types';
 import { LicenseState } from '@n8n/backend-common';
-import { UNLIMITED_LICENSE_QUOTA } from '@n8n/constants';
 import type { User, Variables } from '@n8n/db';
 import { generateNanoId, VariablesRepository } from '@n8n/db';
 import { Service } from '@n8n/di';
 import { hasGlobalScope, Scope } from '@n8n/permissions';
 
-import { FeatureNotLicensedError } from '@/errors/feature-not-licensed.error';
 import { ForbiddenError } from '@/errors/response-errors/forbidden.error';
 import { NotFoundError } from '@/errors/response-errors/not-found.error';
 import { VariableCountLimitReachedError } from '@/errors/variable-count-limit-reached.error';
@@ -183,19 +181,14 @@ export class VariablesService {
 	}
 
 	async getRemainingVariableQuota(): Promise<{ limit: number; remaining: number } | null> {
-		const limit = this.licenseState.getMaxVariables();
-		if (limit === UNLIMITED_LICENSE_QUOTA) return null;
-
-		const variablesCount = (await this.getAllCached()).length;
-		return { limit, remaining: Math.max(0, limit - variablesCount) };
+		// EXPERIMENTAL: disable the Variables count quota.
+		return null;
 	}
 
 	private async canCreateNewVariable() {
-		if (!this.licenseState.isVariablesLicensed()) {
-			throw new FeatureNotLicensedError('feat:variables');
-		}
-
+		// EXPERIMENTAL: Variables are available regardless of license entitlement.
 		const quota = await this.getRemainingVariableQuota();
+
 		if (quota && quota.remaining === 0) {
 			throw new VariableCountLimitReachedError('Variables limit reached');
 		}

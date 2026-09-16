@@ -27,14 +27,11 @@ export function assertVariableWritesAllowed(options: {
 	hasCreations: boolean;
 	hasOverwrites: boolean;
 }): void {
-	const { licenseState, apiKeyScopes, hasCreations, hasOverwrites } = options;
+	const { apiKeyScopes, hasCreations, hasOverwrites } = options;
 	if (!hasCreations && !hasOverwrites) return;
 
-	if (!licenseState.isVariablesLicensed()) {
-		throw new ForbiddenError(
-			'Your license does not allow variables. Importing a package that writes variables requires a license that supports variables.',
-		);
-	}
+	// EXPERIMENTAL: bypass the Variables plan/license check.
+	// API-key scopes are still enforced below.
 	if (hasCreations) assertPackageImportApiKeyScopes(apiKeyScopes, ['variable:create']);
 	if (hasOverwrites) assertPackageImportApiKeyScopes(apiKeyScopes, ['variable:update']);
 }

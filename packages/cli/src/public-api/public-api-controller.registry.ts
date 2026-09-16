@@ -188,7 +188,7 @@ export class PublicApiControllerRegistry {
 
 	private createLicenseMiddleware(feature: BooleanLicenseFeature): RequestHandler {
 		return (_req, res, next) => {
-			if (!Container.get(License).isLicensed(feature)) {
+			if (feature !== 'feat:variables' && !Container.get(License).isLicensed(feature)) {
 				res.status(403).json({ message: new FeatureNotLicensedError(feature).message });
 				return;
 			}

@@ -5,7 +5,6 @@ import { Container } from '@n8n/di';
 import type { PublicAPIEndpoint } from '../../shared/handler.types';
 import {
 	apiKeyHasScopeWithGlobalScopeFallback,
-	isLicensed,
 	validCursor,
 } from '../../shared/middlewares/global.middleware';
 import { paginateArray } from '../../shared/services/pagination.service';
@@ -23,7 +22,6 @@ type VariablesHandlers = {
 
 const variablesHandlers: VariablesHandlers = {
 	createVariable: [
-		isLicensed('feat:variables'),
 		apiKeyHasScopeWithGlobalScopeFallback({ scope: 'variable:create' }),
 		async (req, res) => {
 			const payload = CreateVariableRequestDto.safeParse(req.body);
@@ -36,7 +34,6 @@ const variablesHandlers: VariablesHandlers = {
 		},
 	],
 	updateVariable: [
-		isLicensed('feat:variables'),
 		apiKeyHasScopeWithGlobalScopeFallback({ scope: 'variable:update' }),
 		async (req, res) => {
 			const payload = UpdateVariableRequestDto.safeParse(req.body);
@@ -49,7 +46,6 @@ const variablesHandlers: VariablesHandlers = {
 		},
 	],
 	deleteVariable: [
-		isLicensed('feat:variables'),
 		apiKeyHasScopeWithGlobalScopeFallback({ scope: 'variable:delete' }),
 		async (req, res) => {
 			await Container.get(VariablesService).deleteForUser(req.user, req.params.id);
@@ -58,7 +54,6 @@ const variablesHandlers: VariablesHandlers = {
 		},
 	],
 	getVariables: [
-		isLicensed('feat:variables'),
 		apiKeyHasScopeWithGlobalScopeFallback({ scope: 'variable:list' }),
 		validCursor,
 		async (req, res) => {
