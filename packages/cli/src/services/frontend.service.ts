@@ -531,7 +531,7 @@ export class FrontendService {
 			advancedExecutionFilters: this.license.isAdvancedExecutionFiltersEnabled(),
 			// EXPERIMENTAL: expose Variables as enabled in frontend settings.
 			variables: true,
-			sourceControl: this.license.isSourceControlLicensed(),
+			sourceControl: true,
 			externalSecrets: this.license.isExternalSecretsEnabled(),
 			showNonProdBanner: this.license.isLicensed(LICENSE_FEATURES.SHOW_NON_PROD_BANNER),
 			debugInEditor: this.license.isDebugInEditorLicensed(),
