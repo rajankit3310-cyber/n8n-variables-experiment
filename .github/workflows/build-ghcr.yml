@@ -33,6 +33,9 @@ jobs:
       - name: Setup pnpm
         run: corepack prepare pnpm@11.25.0 --activate
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Build n8n
         run: pnpm build:n8n
 
